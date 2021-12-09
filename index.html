@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+
+  <script type="text/javascript" src="app.js"></script>
+<title>ONMX MI Generator</title>
+</head>
+
+<body>
+<header>
+  <nav>
+    <span>ONMX MI Generator</span>
+  </nav>
+</header>
+
+<div>
+
+<input class="input" type="text" id="unformatted" placeholder="Paste MI here." class="css-input" onfocus="hideCopySelectionBlock();">
+  <br/><br/>
+  <form action="">
+    <label for="row_type">Choose the type of row you want to build: </label>
+    <select name="row_type" id="row_type" onchange="miMakerSelect(value);" class="myButton_FF">
+      <option value="">Select</option>
+      <option value="tod">MI TOD Generator</option>
+    </select>
+  </form>
+</div>
+
+<div class="output">
+  <!-- <button type="button" onclick="copySelect();" class="myButton">Copy HTML</button> -->
+  <!-- <br /><br /> -->
+  <textarea rows="15" cols="80" id="formatted"></textarea>
+</div>
+<div id="copy-selection-block" style="display: none;"><p style="font-style: italic; font-size: .8em;">Selection has been copied!</p></div>
+<!-- <br />
+<button type="button" onclick="location.reload(true);" class="myButton">Refresh Page</button> -->
+</body>
+
+</html>
