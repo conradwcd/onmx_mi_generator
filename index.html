@@ -1,33 +1,38 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
   <link rel="stylesheet" type="text/css" href="styles.css">
-
-  <script type="text/javascript" src="app.js"></script>
-<title>ONMX MI Generator</title>
+  <title>ONMX MI Generator</title>
 </head>
 
 <body>
+
 <header>
   <nav>
     <span>ONMX MI Generator</span>
   </nav>
 </header>
 
-<div>
-
-<input class="input" type="text" id="unformatted" placeholder="Paste MI here." class="css-input" onfocus="hideCopySelectionBlock();">
+<div class="enterForm">
+  Enter Creative Name:<br />
+  <input class="input" type="text" id="creativeName" name="creativeName" placeholder="Enter Creative Name" class="css-input">
   <br/><br/>
-  <form action="">
-    <label for="row_type">Choose the type of row you want to build: </label>
-    <select name="row_type" id="row_type" onchange="miMakerSelect(value);" class="myButton_FF">
-      <option value="">Select</option>
-      <option value="tod">MI TOD Generator</option>
-    </select>
-  </form>
+  Enter Content Name:<br />
+  <input class="input" type="text" id="contentAreaName" name="contentAreaName" placeholder="Enter Content Name" class="css-input">
+  <br/><br/>
+  Enter TOD Href:<br />
+  <input class="input" type="text" id="todHref" name="todHref" placeholder="Enter HREF" class="css-input">
+  <br/><br/>
+  Enter TOD Img Src:<br />
+  <input class="input" type="text" id="todImg" name="todImg" placeholder="Enter Image Src" class="css-input">
+  <br/><br/>
+  Enter Legal MI Img Src:<br />
+  <input class="input" type="text" id="legalMIImgSrc" name="legalMIImgSrc" placeholder="Enter Img Src for MI Legal Copy" class="css-input">
+  <br/><br/>
+  <button id="launch">Build HTML</button>
 </div>
-
 <div class="output">
   <!-- <button type="button" onclick="copySelect();" class="myButton">Copy HTML</button> -->
   <!-- <br /><br /> -->
@@ -37,5 +42,42 @@
 <!-- <br />
 <button type="button" onclick="location.reload(true);" class="myButton">Refresh Page</button> -->
 </body>
+
+<script type="text/javascript">
+var contentAreaName = document.querySelector("#contentAreaName");
+var creativeName = document.querySelector("#creativeName");
+var legalMIImgSrc = document.querySelector("#legalMIImgSrc");
+var todHref = document.querySelector("#todHref");
+var todImg = document.querySelector("#todImg");
+var formatted = document.querySelector("#formatted");
+var launch = document.querySelector("#launch");
+if(launch){
+  launch.addEventListener("click", writeHTML, false);
+}
+
+function writeHTML(){
+  var copyStory = "";
+
+  copyStory += "%%[ /* " + contentAreaName.value + " */ \n";
+  copyStory += "/* CONTENT INFO */ \n";
+  copyStory += "set @creativeName = \"" + creativeName.value + "\" \n";
+  copyStory += "set @contentAreaName = \"" + contentAreaName.value + "\" \n\n";
+  copyStory += "/* LEGAL */ \n";
+  copyStory += "set @legal_ThisContentArea = Concat(";
+  copyStory += "\'<table class=\"wrapper\" width=\"640\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tr style=\"line-height: 1;\"><td>";
+  copyStory += "<img alt=\"Display images to show real-time content\" class=\"photo\" width=\"640\" style=\"border: 0; display: block;\" border=\"0\" src=\"" +  legalMIImgSrc.value + "\" />"
+  copyStory += "</td></tr></table>\') \n"
+  copyStory += "]%% \n\n"
+  copyStory += "<table class=\"wrapper\" width=\"640\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"> \n"
+  copyStory += "<tr><td valign=\"top\"><a href=\"" + todHref.value + "\" target=\"_blank\" alias=\"%%=v(@alias)=%%\"><img alt=\"Display images to show real-time content\" style=\"border: 0; display: block;\" border=\"0\" src=\"" + todImg.value + "\" class=\"photo\" width=\"640\" /></a></td></tr> \n"
+  copyStory += "<tr><td style=\"font-size:1px; line-height:1px;\" height=\"20\">&nbsp;</td></tr> \n"
+  copyStory += "</table> \n\n"
+  copyStory += "%%[ IF @legal_ThisContentArea != \"\" AND @showLegal != \"n\" THEN ]%%\n"
+  copyStory += "%%[set @legal = Concat(@legal, iif(Empty(@legal), \"\", \"<br><br>\"), @legal_ThisContentArea)]%%\n"
+  copyStory += "%%[ ENDIF ]%% \n"
+
+  formatted.innerHTML = copyStory;
+}
+</script>
 
 </html>
