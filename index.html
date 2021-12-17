@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -9,75 +8,88 @@
 
 <body>
 
-<header>
-  <nav>
-    <span>ONMX MI Generator</span>
-  </nav>
-</header>
+  <header>
+    <nav>
+      <span>ONMX MI Generator</span>
+    </nav>
+  </header>
 
-<div class="enterForm">
-  Enter Creative Name:<br />
-  <input class="input" type="text" id="creativeName" name="creativeName" placeholder="Enter Creative Name" class="css-input">
-  <br/><br/>
-  Enter Content Name:<br />
-  <input class="input" type="text" id="contentAreaName" name="contentAreaName" placeholder="Enter Content Name" class="css-input">
-  <br/><br/>
-  Enter TOD Href:<br />
-  <input class="input" type="text" id="todHref" name="todHref" placeholder="Enter HREF" class="css-input">
-  <br/><br/>
-  Enter TOD Img Src:<br />
-  <input class="input" type="text" id="todImg" name="todImg" placeholder="Enter Image Src" class="css-input">
-  <br/><br/>
-  Enter Legal MI Img Src:<br />
-  <input class="input" type="text" id="legalMIImgSrc" name="legalMIImgSrc" placeholder="Enter Img Src for MI Legal Copy" class="css-input">
-  <br/><br/>
-  <button id="launch">Build HTML</button>
-</div>
-<div class="output">
-  <!-- <button type="button" onclick="copySelect();" class="myButton">Copy HTML</button> -->
-  <!-- <br /><br /> -->
-  <textarea rows="15" cols="80" id="formatted"></textarea>
-</div>
-<div id="copy-selection-block" style="display: none;"><p style="font-style: italic; font-size: .8em;">Selection has been copied!</p></div>
-<!-- <br />
-<button type="button" onclick="location.reload(true);" class="myButton">Refresh Page</button> -->
+  <div class="enterForm">
+    Enter Creative Name:<br />
+    <input class="input" type="text" id="creativeName" name="creativeName" placeholder="Enter Creative Name" class="css-input">
+    <br /><br />
+    Enter Content Name:<br />
+    <input class="input" type="text" id="contentAreaName" name="contentAreaName" placeholder="Enter Content Name" class="css-input">
+    <br /><br />
+    Enter Copied Text from MI Clipboard:<br />
+    <textarea rows="15" cols="80" id="copiedMI"></textarea>
+
+    <br /><br />
+    <button id="launch">Build HTML</button>
+  </div>
+
+  <div class="output">
+    <textarea rows="15" cols="80" id="formatted"></textarea>
+  </div>
+
+  <div id="copy-selection-block" style="display: none;">
+    <p style="font-style: italic; font-size: .8em;">Selection has been copied!</p>
+  </div>
+
 </body>
 
 <script type="text/javascript">
-var contentAreaName = document.querySelector("#contentAreaName");
-var creativeName = document.querySelector("#creativeName");
-var legalMIImgSrc = document.querySelector("#legalMIImgSrc");
-var todHref = document.querySelector("#todHref");
-var todImg = document.querySelector("#todImg");
-var formatted = document.querySelector("#formatted");
-var launch = document.querySelector("#launch");
-if(launch){
-  launch.addEventListener("click", writeHTML, false);
-}
+  var string = ``;
+  var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&#\/%?=~_|!:,.;()@]*[-A-Z0-9+&@#\/%=~_|])/ig;
+  var assets, legalMIImgSrc, todHref, todImg
 
-function writeHTML(){
-  var copyStory = "";
+  var contentAreaName = document.querySelector("#contentAreaName");
+  var creativeName = document.querySelector("#creativeName");
+  var formatted = document.querySelector("#formatted");
+  var launch = document.querySelector("#launch");
+  if (launch) {
+    launch.addEventListener("click", writeHTML, false);
+  }
 
-  copyStory += "%%[ /* " + contentAreaName.value + " */ \n";
-  copyStory += "/* CONTENT INFO */ \n";
-  copyStory += "set @creativeName = \"" + creativeName.value + "\" \n";
-  copyStory += "set @contentAreaName = \"" + contentAreaName.value + "\" \n\n";
-  copyStory += "/* LEGAL */ \n";
-  copyStory += "set @legal_ThisContentArea = Concat(";
-  copyStory += "\'<table class=\"wrapper\" width=\"640\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tr style=\"line-height: 1;\"><td>";
-  copyStory += "<img alt=\"Display images to show real-time content\" class=\"photo\" width=\"640\" style=\"border: 0; display: block;\" border=\"0\" src=\"" +  legalMIImgSrc.value + "\" />"
-  copyStory += "</td></tr></table>\') \n"
-  copyStory += "]%% \n\n"
-  copyStory += "<table class=\"wrapper\" width=\"640\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"> \n"
-  copyStory += "<tr><td valign=\"top\"><a href=\"" + todHref.value + "\" target=\"_blank\" alias=\"%%=v(@alias)=%%\"><img alt=\"Display images to show real-time content\" style=\"border: 0; display: block;\" border=\"0\" src=\"" + todImg.value + "\" class=\"photo\" width=\"640\" /></a></td></tr> \n"
-  copyStory += "<tr><td style=\"font-size:1px; line-height:1px;\" height=\"20\">&nbsp;</td></tr> \n"
-  copyStory += "</table> \n\n"
-  copyStory += "%%[ IF @legal_ThisContentArea != \"\" AND @showLegal != \"n\" THEN ]%%\n"
-  copyStory += "%%[set @legal = Concat(@legal, iif(Empty(@legal), \"\", \"<br><br>\"), @legal_ThisContentArea)]%%\n"
-  copyStory += "%%[ ENDIF ]%% \n"
+  function writeHTML() {
+    // reset
+    document.getElementById("formatted").innerHTML = "";
+    var assets = [];
 
-  formatted.innerHTML = copyStory;
-}
+    // get MI links and erase tracking
+    var string = document.getElementById("copiedMI").value;
+    var miList = string.match(urlRegex);
+    miList.pop();
+
+    // get legal, tod href, and tod img src
+    var legalMIImgSrc = miList[miList.length - 1];
+    var todHref = miList[miList.length - 3];
+    var todImg = miList[miList.length - 2];
+    miList.pop();
+
+    var copyStory = "";
+
+    copyStory += "%%[ /* " + contentAreaName.value + " */ \n";
+    copyStory += "/* CONTENT INFO */ \n";
+    copyStory += "set @creativeName = \"" + creativeName.value + "\" \n";
+    copyStory += "set @contentAreaName = \"" + contentAreaName.value + "\" \n\n";
+    copyStory += "/* LEGAL */ \n";
+    copyStory += "set @legal_ThisContentArea = Concat(";
+    copyStory += "\'<table class=\"wrapper\" width=\"640\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tr style=\"line-height: 1;\"><td>";
+    copyStory += "<img alt=\"Display images to show real-time content\" class=\"photo\" width=\"640\" style=\"border: 0; display: block;\" border=\"0\" src=\"" + legalMIImgSrc + "\" />"
+    copyStory += "</td></tr></table>\') \n"
+    copyStory += "]%% \n\n"
+    copyStory += "<table class=\"wrapper\" width=\"640\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"> \n"
+    copyStory += "<tr><td valign=\"top\"><a href=\"" + todHref + "\" target=\"_blank\" alias=\"%%=v(@alias)=%%\"><img alt=\"Display images to show real-time content\" style=\"border: 0; display: block;\" border=\"0\" src=\"" + todImg +
+      "\" class=\"photo\" width=\"640\" /></a></td></tr> \n"
+    copyStory += "<tr><td style=\"font-size:1px; line-height:1px;\" height=\"20\">&nbsp;</td></tr> \n"
+    copyStory += "</table> \n\n"
+    copyStory += "%%[ IF @legal_ThisContentArea != \"\" AND @showLegal != \"n\" THEN ]%%\n"
+    copyStory += "%%[set @legal = Concat(@legal, iif(Empty(@legal), \"\", \"<br><br>\"), @legal_ThisContentArea)]%%\n"
+    copyStory += "%%[ ENDIF ]%% \n"
+
+    formatted.innerHTML = copyStory;
+  }
 </script>
 
 </html>
