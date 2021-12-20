@@ -15,13 +15,13 @@
   </header>
 
   <div class="enterForm">
-    Enter Creative Name:<br />
-    <input class="input" type="text" id="creativeName" name="creativeName" placeholder="Enter Creative Name" class="css-input">
+    Calendar Block Creative Name:<br />
+    <input class="input" type="text" id="creativeName" name="creativeName" placeholder="Creative Name" class="css-input">
     <br /><br />
-    Enter Content Name:<br />
-    <input class="input" type="text" id="contentAreaName" name="contentAreaName" placeholder="Enter Content Name" class="css-input">
+    Content/Link Path:<br />
+    <input class="input" type="text" id="contentAreaName" name="contentAreaName" placeholder="Content Name" class="css-input">
     <br /><br />
-    Paste Text from MI Clipboard:<br />
+    Enter Copied Text from MI Clipboard:<br />
     <textarea rows="15" cols="80" id="copiedMI"></textarea>
 
     <br /><br />
@@ -41,7 +41,7 @@
 <script type="text/javascript">
   var string = ``;
   var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&#\/%?=~_|!:,.;()@]*[-A-Z0-9+&@#\/%=~_|])/ig;
-  var assets, legalMIImgSrc, todHref, todImg
+  var miList, legalMIImgSrc, todHref, todImg
 
   var contentAreaName = document.querySelector("#contentAreaName");
   var creativeName = document.querySelector("#creativeName");
@@ -54,18 +54,17 @@
   function writeHTML() {
     // reset
     document.getElementById("formatted").innerHTML = "";
-    var assets = [];
+    var miList = [];
 
-    // get MI links and erase tracking
+    // get MI URLs and remove the last Campaign Tracking Pixel URL from constructed miList Array
     var string = document.getElementById("copiedMI").value;
     var miList = string.match(urlRegex);
     miList.pop();
 
-    // get legal, tod href, and tod img src
-    var legalMIImgSrc = miList[miList.length - 1];
+    // get and assign tod href, tod img, and legal URLs
     var todHref = miList[miList.length - 3];
     var todImg = miList[miList.length - 2];
-    miList.pop();
+    var legalMIImgSrc = miList[miList.length - 1];
 
     var copyStory = "";
 
