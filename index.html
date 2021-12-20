@@ -68,7 +68,7 @@
 
     var copyStory = "";
 
-    copyStory += "%%[ /* " + contentAreaName.value + " */ \n";
+    copyStory += "%%[ /* " + contentAreaName.value + " */ \n\n";
     copyStory += "/* CONTENT INFO */ \n";
     copyStory += "set @creativeName = \"" + creativeName.value + "\" \n";
     copyStory += "set @contentAreaName = \"" + contentAreaName.value + "\" \n\n";
@@ -76,12 +76,14 @@
     copyStory += "set @legal_ThisContentArea = Concat(";
     copyStory += "\'<table class=\"wrapper\" width=\"640\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tr style=\"line-height: 1;\"><td>";
     copyStory += "<img alt=\"Display images to show real-time content\" class=\"photo\" width=\"640\" style=\"border: 0; display: block;\" border=\"0\" src=\"" + legalMIImgSrc + "\" />"
-    copyStory += "</td></tr></table>\') \n"
+    copyStory += "</td></tr></table>\') \n\n"
     copyStory += "]%% \n\n"
     copyStory += "<table class=\"wrapper\" width=\"640\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"> \n"
-    copyStory += "<tr><td valign=\"top\"><a href=\"" + todHref + "\" target=\"_blank\" alias=\"%%=v(@alias)=%%\"><img alt=\"Display images to show real-time content\" style=\"border: 0; display: block;\" border=\"0\" src=\"" + todImg +
-      "\" class=\"photo\" width=\"640\" /></a></td></tr> \n"
-    copyStory += "<tr><td style=\"font-size:1px; line-height:1px;\" height=\"20\">&nbsp;</td></tr> \n"
+    copyStory += "&nbsp;&nbsp;<tr> \n"
+    copyStory += "&nbsp;&nbsp;&nbsp;&nbsp;<td valign=\"top\"><a href=\"" + todHref + "\" target=\"_blank\" alias=\"%%=v(@alias)=%%\"><img alt=\"Display images to show real-time content\" style=\"border: 0; display: block;\" border=\"0\" src=\"" + todImg +
+      "\" class=\"photo\" width=\"640\" /></a></td> \n"
+    copyStory += "&nbsp;&nbsp;</tr> \n"
+    copyStory += "&nbsp;&nbsp;<tr><td style=\"font-size:1px; line-height:1px;\" height=\"20\">&nbsp;</td></tr> \n"
     copyStory += "</table> \n\n"
     copyStory += "%%[ IF @legal_ThisContentArea != \"\" AND @showLegal != \"n\" THEN ]%%\n"
     copyStory += "%%[set @legal = Concat(@legal, iif(Empty(@legal), \"\", \"<br><br>\"), @legal_ThisContentArea)]%%\n"
