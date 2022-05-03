@@ -75,7 +75,8 @@
     copyStory += "/* LEGAL */ \n";
     copyStory += "set @legal_ThisContentArea = Concat(";
     copyStory += "\'<table class=\"wrapper\" width=\"640\" align=\"center\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"><tr style=\"line-height: 1;\"><td>";
-    copyStory += "<img alt=\"Display images to show real-time content\" class=\"photo\" width=\"640\" style=\"border: 0; display: block;\" border=\"0\" src=\"" + legalMIImgSrc + "\" />"
+    copyStory += "<img alt=\"Display images to show real-time content\" class=\"photo\" width=\"640\" style=\"border: 0; display: block;\" border=\"0\" src=\"" + legalMIImgSrc + "\" /> \n\n";
+    copyStory += "ContentBlockbyName(\"Shared Content\ONUS\Snippets\CheckDuplicateLegal\")";
     copyStory += "</td></tr></table>\') \n\n"
     copyStory += "]%% \n\n"
     copyStory += "<table class=\"wrapper\" width=\"640\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\"> \n"
